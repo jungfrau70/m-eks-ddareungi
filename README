@@ -1,0 +1,4 @@
+1. swap off
+2. disk (/etc/fstab)
+3. ssh-keygen & change
+4. docker install

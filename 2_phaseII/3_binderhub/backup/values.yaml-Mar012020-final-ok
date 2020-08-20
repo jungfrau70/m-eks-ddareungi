@@ -1,0 +1,292 @@
+replicas: 2
+
+resources:
+  requests:
+    cpu: 0.2
+    memory: 512Mi
+
+rbac:
+  enabled: true
+
+nodeSelector: {}
+
+#image:
+#  name: jupyterhub/k8s-binderhub
+#  tag: 'local'
+
+# registry here is only used to create docker config.json
+registry:
+  # key in 'auths' in docker config.json,
+  # ~always the registry url
+  #url:
+  # registry username+password
+  username: "alphatics"
+  password: "2020@jupyteronline"
+
+service:
+  type: ClusterIP
+  #type: LoadBalancer
+  labels: {}
+  annotations:
+    prometheus.io/scrape: 'true'
+  nodePort:
+
+config:
+  BinderHub:
+    use_registry: true
+    image_prefix: alphatics/binder-prod-
+    hub_url: https://hub.jupyteronline.com
+    log_level: 10
+  #auth_enabled: true
+
+extraConfig: {}
+
+# have to set cors.allowOrigin twice:
+# once in top-level cors.allowOrigin,
+# and again in jupyterhub.hub.extraConfigMap.cors.allowOrigin
+
+# Using YAML anchors, `&cors` for the first appearance and `*cors` for subsequent
+# appearances, allows us to remove redundancy in this (BinderHub) `values.yaml`.
+# The anchors do not extend beyond this file.
+# As such, users must set `cors` separately for their own user `values.yaml` for notebooks.
+# `cors` will be set separately in the user `values.yaml` and binderhub`values.yaml`.
+# The same anchor pattern (`&cors`, `*cors`) can be used in the user `values.yaml`.
+
+cors: &cors
+  allowOrigin:
+
+jupyterhub:
+  cull:
+    enabled: true
+    users: true
+  custom:
+    cors: *cors
+    binderauth_enabled: true
+  rbac:
+    enabled: true
+  proxy:
+    secretToken: 53a338a0aee98f74c2b431cac2ff7cc0e59d52be13aeea07a0145750529e050e
+
+  hub:
+    redirectToServer: false
+    services:
+      binder:
+        apiToken: "89ae2b4e9966985b982d6bf805ed008ef824bb127b5c44c44d72296a69ee47bd"
+    cookieSecret: "5eb53f6818f742d8c62b535f0a6df54880e7039be0a9ae255436d95f4c661c29"
+    extraEnv:
+      OAUTH2_AUTHORIZE_URL: https://keycloak.jupyteronline.com/auth/realms/master/protocol/openid-connect/auth
+      OAUTH2_TOKEN_URL: https://keycloak.jupyteronline.com/auth/realms/master/protocol/openid-connect/token
+      OAUTH_CALLBACK_URL: https://hub.jupyteronline.com/hub/oauth_callback
+    db:
+      type: postgres
+      upgrade: true
+      password: "@postgres"
+      url: "postgresql+psycopg2://jupyterhub@hub-postgres-postgresql/jupyterhub"
+      pvc:
+        storageClassName: nfs-client
+    extraConfig:
+      jupyterlab: |
+        c.Authenticator.auto_login = True
+        c.Spawner.default_url ='/lab'
+        c.Spawner.cmd = ['jupyter-labhub']
+      hub: |
+        c.JupyterHub.tornado_settings = {
+          'headers': {
+            'Content-Security-Policy': "base-uri 'self'"
+          },
+        }
+      spawner: >-
+        c.Spawner.args = ["--NotebookApp.tornado_settings={ \
+          'headers':{                                    \
+            'Content-Security-Policy': \"base-uri 'self' \", \
+          }, \
+        }"]
+      00-binder: |
+        from tornado import web
+
+        # get custom config from values.custom
+        import z2jh
+        cors = z2jh.get_config('custom.cors', {})
+        auth_enabled = z2jh.get_config('custom.binderauth_enabled', False)
+
+        # image & token are set via spawn options
+        from kubespawner import KubeSpawner
+
+        class BinderSpawner(KubeSpawner):
+            def get_args(self):
+                if auth_enabled:
+                    args = super().get_args()
+                else:
+                    args = [
+                        '--ip=0.0.0.0',
+                        '--port=%i' % self.port,
+                        '--NotebookApp.base_url=%s' % self.server.base_url,
+                        '--NotebookApp.token=%s' % self.user_options['token'],
+                        '--NotebookApp.trust_xheaders=True',
+                    ]
+                    allow_origin = cors.get('allowOrigin')
+                    if allow_origin:
+                        args.append('--NotebookApp.allow_origin=' + allow_origin)
+                    args += self.args
+                return args
+
+            def start(self):
+                if not auth_enabled:
+                    if 'token' not in self.user_options:
+                        raise web.HTTPError(400, "token required")
+                    if 'image' not in self.user_options:
+                        raise web.HTTPError(400, "image required")
+                if 'image' in self.user_options:
+                    self.image = self.user_options['image']
+                return super().start()
+
+            def get_env(self):
+                env = super().get_env()
+                if 'repo_url' in self.user_options:
+                    env['BINDER_REPO_URL'] = self.user_options['repo_url']
+                for key in (
+                        'binder_ref_url',
+                        'binder_launch_host',
+                        'binder_persistent_request',
+                        'binder_request'):
+                    if key in self.user_options:
+                        env[key.upper()] = self.user_options[key]
+                return env
+
+        c.JupyterHub.spawner_class = BinderSpawner
+
+    services:
+      binder:
+        admin: true
+        apiToken: 73ba2c8ab3f6d49204f86ebfb42877cf74c13628e647db8669ea49f9c695229e
+
+  auth:
+    type: custom
+    custom:
+      className: oauthenticator.generic.GenericOAuthenticator
+      config:
+        login_service: "keycloak"
+        client_id: "jhub"
+        client_secret: "3dc690ab-2a24-4d05-91d6-4aff2accc878"
+        token_url: https://keycloak.jupyteronline.com/auth/realms/master/protocol/openid-connect/token
+        userdata_url: https://keycloak.jupyteronline.com/auth/realms/master/protocol/openid-connect/userinfo
+        userdata_method: GET
+        userdata_params: {'state': 'state'}
+        username_key: preferred_username
+
+  singleuser:
+    cpu:
+      limit: 8
+      guarantee: 4
+    memory:
+      limit: 8G
+      guarantee: 4M
+    storage:
+      dynamic:
+        storageClass: nfs-client
+    image:
+      name: jupyter/datascience-notebook
+      tag: 2343e33dec46
+    profileList:
+      - display_name: "Datascience environment"
+        description: "If you want the additional bells and whistles: Python, R, and Julia."
+        default: true
+      - display_name: "Teaching environment"
+        description: "Lab, Classroom, or Business"
+        kubespawner_override:
+          image: pupster90/io:latest
+          lifecycle_hooks:
+            postStart:
+              exec:
+                command: ["sh","-c","rm -rf Welcome_to_io_Hub && git clone https://github.com/pupster90/Welcome_to_io_Hub.git"]
+      - display_name: "Tensorflow 1.11 environment"
+        description: "If you want the additional bells and whistles: Tensorflow and Keras machine learning libraries."
+        kubespawner_override:
+          image: jupyter/tensorflow-notebook:2343e33dec46
+      - display_name: "Pyspark environment"
+        description: "The Jupyter Stacks spark image!"
+        kubespawner_override:
+          image: jupyter/pyspark-notebook:2343e33dec46
+              
+  # culling old users, unit: seconds
+  cull:
+    enabled: true
+    timeout: 1800
+    every: 300
+
+  # allow image to be prepulled
+  prePuller:
+    continuous:
+      enabled: true
+      prePuller:
+    hook:
+      enabled: false
+
+  # pod priority - scale up nodes ahead of real users arrivals
+  # user scheduler - pack users tight on some nodes
+  scheduling:
+    userScheduler:
+      enabled: true
+    podPriority:
+      enabled: true
+    userPlaceholder:
+      # Specify three dummy user pods will be used as placeholders
+      replicas: 3
+
+deployment:
+  labels: {}
+
+dind:
+  enabled: false
+  initContainers: []
+  daemonset:
+    image:
+      name: docker
+      tag: 19.03.5-dind
+    # Additional command line arguments to pass to dockerd
+    extraArgs: []
+  storageDriver: overlay2
+  resources: {}
+  hostSocketDir: /var/run/dind
+  hostLibDir: /var/lib/dind
+
+imageCleaner:
+  enabled: false
+  image:
+    name: jupyterhub/k8s-image-cleaner
+    tag: 'local'
+    repository: jupyterhub/k8s-image-cleaner
+  # delete an image at most every 5 seconds
+  delay: 5
+  # Interpret threshold values as percentage or bytes
+  imageGCThresholdType: "relative"
+  # when 80% of inodes are used,
+  # cull images until it drops below 60%
+  imageGCThresholdHigh: 80
+  imageGCThresholdLow: 60
+  # cull images on the host docker as well as dind
+  host:
+    enabled: true
+    dockerSocket: /var/run/docker.sock
+    dockerLibDir: /var/lib/docker
+
+ingress:
+  enabled: false
+  https:
+    enabled: false
+    type: kube-lego
+  hosts:
+    - chart-example.local
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  tls: []
+    # Secrets must be manually created in the namespace.
+    # - secretName: chart-example-tls
+    #   hosts:
+    #     - chart-example.local
+
+initContainers: []
+extraVolumes: []
+extraVolumeMounts: []
+extraEnv: []

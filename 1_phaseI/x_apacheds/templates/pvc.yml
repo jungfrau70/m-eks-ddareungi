@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  namespace: sso
+  name: apacheds-volume
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: nfs-client
+  resources:
+    requests:
+      storage: 1Mi
+  #selector:
+  #  matchLabels:
+  #    app: apacheds

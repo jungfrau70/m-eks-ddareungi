@@ -1,0 +1,56 @@
+version: 1
+
+dn: ou=groups,dc=exceptionerror,dc=io
+objectClass: organizationalUnit
+objectClass: top
+ou: groups
+
+dn: cn=Ensign,ou=groups,dc=exceptionerror,dc=io
+objectClass: top
+objectClass: groupOfUniqueNames
+cn: Ensign
+uniqueMember: 
+
+dn: cn=Crewman,ou=groups,dc=exceptionerror,dc=io
+objectClass: top
+objectClass: groupOfUniqueNames
+cn: Crewman
+uniqueMember:
+
+dn: cn=Engineer,ou=groups,dc=exceptionerror,dc=io
+objectClass: top
+objectClass: groupOfUniqueNames
+cn: Engineer
+uniqueMember:
+
+dn: cn=Commander,ou=groups,dc=exceptionerror,dc=io
+objectClass: top
+objectClass: groupOfUniqueNames
+cn: Commander
+uniqueMember:
+
+dn: cn=Mark Cuban,ou=users,dc=exceptionerror,dc=io
+cn: Mark Cuban
+gidnumber: 500
+givenname: Mark
+homedirectory: /home/users/mcuban
+objectclass: inetOrgPerson
+objectclass: posixAccount
+objectclass: top
+sn: Cuban
+uid: mcuban
+uidnumber: 1002
+userpassword: {MD5}ICy5YqxZB1uWSwcVLSNLcA==
+
+dn: cn=Steve Jobs,ou=users,dc=exceptionerror,dc=io
+cn: Steve Jobs
+gidnumber: 500
+givenname: Steve
+homedirectory: /home/users/sjobs
+objectclass: inetOrgPerson
+objectclass: posixAccount
+objectclass: top
+sn: Jobs
+uid: sjobs
+uidnumber: 1001
+userpassword: {MD5}ICy5YqxZB1uWSwcVLSNLcA==

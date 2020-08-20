@@ -1,0 +1,23 @@
+
+NOTES:
+The NFS Provisioner service has now been installed.
+
+A storage class named 'nfs' has now been created
+and is available to provision dynamic volumes.
+
+You can use this storageclass by creating a `PersistentVolumeClaim` with the
+correct storageClassName attribute. For example:
+
+    ---
+    kind: PersistentVolumeClaim
+    apiVersion: v1
+    metadata:
+      name: test-dynamic-volume-claim
+    spec:
+      storageClassName: "nfs"
+      accessModes:
+        - ReadWriteOnce
+      resources:
+        requests:
+          storage: 100Mi
+
