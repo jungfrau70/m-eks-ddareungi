@@ -1,0 +1,6 @@
+HTTP/2.0 200 OK
+Content-Length: 202
+Content-Type: application/json
+Date: Tue, 25 Aug 2020 13:02:44 GMT
+
+{"kind":"APIResourceList","apiVersion":"v1","groupVersion":"authentication.k8s.io/v1","resources":[{"name":"tokenreviews","singularName":"","namespaced":false,"kind":"TokenReview","verbs":["create"]}]}

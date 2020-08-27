@@ -1,0 +1,6 @@
+HTTP/2.0 200 OK
+Content-Length: 878
+Content-Type: application/json
+Date: Tue, 25 Aug 2020 12:51:54 GMT
+
+{"kind":"APIResourceList","apiVersion":"v1","groupVersion":"metacontroller.k8s.io/v1alpha1","resources":[{"name":"controllerrevisions","singularName":"controllerrevision","namespaced":true,"kind":"ControllerRevision","verbs":["delete","deletecollection","get","list","patch","create","update","watch"],"storageVersionHash":"rqlWZzlHLOE="},{"name":"compositecontrollers","singularName":"compositecontroller","namespaced":false,"kind":"CompositeController","verbs":["delete","deletecollection","get","list","patch","create","update","watch"],"shortNames":["cc","cctl"],"storageVersionHash":"QFUQtxrQAio="},{"name":"decoratorcontrollers","singularName":"decoratorcontroller","namespaced":false,"kind":"DecoratorController","verbs":["delete","deletecollection","get","list","patch","create","update","watch"],"shortNames":["dec","decorators"],"storageVersionHash":"XyCtMLKTehU="}]}

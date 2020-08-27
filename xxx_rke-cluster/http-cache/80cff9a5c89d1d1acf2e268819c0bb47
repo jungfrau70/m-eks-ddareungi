@@ -1,0 +1,16 @@
+HTTP/2.0 200 OK
+Content-Length: 263
+Content-Type: application/json
+Date: Fri, 15 May 2020 23:49:27 GMT
+
+{
+  "major": "1",
+  "minor": "17",
+  "gitVersion": "v1.17.2",
+  "gitCommit": "59603c6e503c87169aea6106f57b9f242f64df89",
+  "gitTreeState": "clean",
+  "buildDate": "2020-01-18T23:22:30Z",
+  "goVersion": "go1.13.5",
+  "compiler": "gc",
+  "platform": "linux/amd64"
+}
