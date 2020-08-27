@@ -3,9 +3,10 @@
 # free to use different values.
 source ./.env
 
+kubectl get namespace $NAMESPACE &> /dev/null || kubectl create namespace $NAMESPACE
+
 helm repo add cetic https://cetic.github.io/helm-charts
 helm repo update
-kubectl create ns $NAMESPACE
 
 cd chart
 helm install $RELEASE cetic/phpldapadmin \

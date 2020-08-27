@@ -1,8 +1,8 @@
 #!/bin/bash
 source ./.env
 
-kubectl create ns sso
-#helm install stable/keycloak \
+kubectl get namespace $NAMESPACE &> /dev/null || kubectl create namespace $NAMESPACE
+
 helm install $RELEASE . \
         --namespace $NAMESPACE \
 	--values values.yaml

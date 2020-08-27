@@ -1,7 +1,7 @@
 #!/bin/bash
 source ./.env
 
-kubectl create ns $NAMESPACE
+kubectl get namespace $NAMESPACE &> /dev/null || kubectl create namespace $NAMESPACE
 
 cd chart
 helm install $RELEASE . \

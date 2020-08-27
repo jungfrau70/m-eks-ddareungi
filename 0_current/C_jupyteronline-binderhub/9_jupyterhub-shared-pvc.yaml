@@ -2,7 +2,7 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  namespace: bhub
+  namespace: jupyteronline
   name: jupyterhub-shared-pvc
 spec:
   accessModes:
