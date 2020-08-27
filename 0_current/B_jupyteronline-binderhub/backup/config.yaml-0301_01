@@ -1,0 +1,23 @@
+proxy:
+  secretToken: "b1be0bae6a5e734125fdbfdf5c2bd09de717e05c126c39e5bba06afb6e5c294d"
+
+rbac:
+  enabled: true
+
+resources:
+  requests:
+    cpu: 0.2
+    memory: 100Mi
+
+cors: &cors
+  allowOrigin: '*'
+
+service:
+  type: ClusterIP
+
+BinderHub:
+  use_registry: true
+  #auth_enabled: true
+  #image_prefix: alphatics/binder-prod-
+  #hub_url: https://hub.jupyteronline.com
+  #log_level: 10
