@@ -182,7 +182,7 @@ jupyterhub:
     type: ldap
     ldap:
       server:
-        address: ldap-openldap.sso.svc
+        address: ldap-openldap.auth.svc
       dn:
         templates:
           - 'uid={username},ou=People,dc=jupyteronline,dc=com'

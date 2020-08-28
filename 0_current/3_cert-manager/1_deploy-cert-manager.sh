@@ -12,5 +12,5 @@ helm repo update
 helm install \
   cert-manager \
   jetstack/cert-manager \
-  --namespace cert-manager \
+  --namespace $NAMESPACE \
   --version v0.13.0 

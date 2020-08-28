@@ -19,7 +19,8 @@ strategy: {}
 image:
   # From repository https://github.com/osixia/docker-openldap
   repository: osixia/openldap
-  tag: stable
+  tag: latest
+  #tag: stable
   pullPolicy: IfNotPresent
 
 # Spcifies an existing secret to be used for admin and config user passwords
@@ -46,7 +47,7 @@ service:
 # Default configuration for openldap as environment variables. These get injected directly in the container.
 # Use the env variables from https://github.com/osixia/docker-openldap#beginner-guide
 env:
-  LDAP_ORGANISATION: "Alpha"
+  LDAP_ORGANISATION: "JupyterBook"
   LDAP_DOMAIN: "jupyteronline.com"
   LDAP_ADMIN_PASSWORD: "2020@alpha"
   LDAP_CONFIG_PASSWORD: "2020@alpha"
