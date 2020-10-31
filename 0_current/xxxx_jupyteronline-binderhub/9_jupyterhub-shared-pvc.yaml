@@ -1,0 +1,12 @@
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  namespace: jupyteronline
+  name: jupyterhub-shared-pvc
+spec:
+  accessModes:
+  - ReadWriteMany
+  resources:
+   requests:
+    storage: 30G

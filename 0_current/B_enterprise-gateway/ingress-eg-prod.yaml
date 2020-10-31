@@ -1,0 +1,30 @@
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  namespace: enterprise-gateway
+  name: enterprise-gateway-ingress
+  #path: /gateway
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    cert-manager.io/cluster-issuer: letsencrypt-prod-nginx
+    kubernetes.io/tls-acme: "true"
+
+spec:
+  tls:
+  # Replace the placeholder with your domain name (e.g. ingress.dev.blog.shoot.canary.k8s-hana.ondemand.com)
+  - hosts:
+    - egw.jupyterbook.com
+    secretName: nginx-egw-prod-secret
+  rules:
+    # Replace the placeholder with your domain name (e.g. ingress.dev.blog.shoot.canary.k8s-hana.ondemand.com)
+    - host: egw.jupyterbook.com
+      http:
+        paths:
+          - path: /gateway/?(.*)
+            backend:
+              serviceName: enterprise-gateway
+              servicePort: 8888
