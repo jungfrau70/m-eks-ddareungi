@@ -201,7 +201,8 @@ persistence:
   ## The value is evaluated as a template, so, for example, the name can depend on .Release or .Chart
   # existingClaim:
   mountPath: /bitnami/postgresql
-  storageClass: nfs-client
+  #storageClass: nfs-client
+  storageClass: local-path
   accessModes:
     - ReadWriteOnce
   size: 20Gi
