@@ -35,13 +35,18 @@ hub:
   labels: {}
   annotations: {}
   extraConfig: |-
+    config = '/etc/jupyter/jupyter_notebook_config.py'
+    c.Spawner.cmd = ['jupyter-labhub']
+
     from kubespawner import KubeSpawner
     from tornado import gen
     import yaml
     class CustomKubeSpawner(KubeSpawner):
         def get_env(self):
             env = super().get_env()
+
             env['KERNEL_USERNAME'] =  self.user.name
+
             return env
     c.JupyterHub.spawner_class = CustomKubeSpawner
     c.Spawner.start_timeout = 500
@@ -296,8 +301,8 @@ singleuser:
     - display_name: "Jupyter Enterprise Gateway"
       description: "If you want the additional bells and whistles: Tensorflow and Keras machine learning libraries."
       kubespawner_override:
-        image: elyra/elyra:1.0.1
-        #image: elyra/nb2kg:2.3.0
+        image: elyra/nb2kg:2.3.0
+        #image: elyra/elyra:1.0.1
 
   storage:
     type: dynamic
