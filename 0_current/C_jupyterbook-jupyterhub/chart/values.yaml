@@ -298,7 +298,8 @@ singleuser:
     - display_name: "Jupyter Enterprise Gateway"
       description: "If you want the additional bells and whistles: Tensorflow and Keras machine learning libraries."
       kubespawner_override:
-        image: elyra/elyra:1.0.1
+        image: elyra/nb2kg:2.3.0
+        #image: elyra/elyra:1.0.1
 
   storage:
     type: dynamic
