@@ -72,7 +72,6 @@ ingress:
       cert-manager.io/cluster-issuer: letsencrypt-prod-nginx
       kubernetes.io/tls-acme: "true"
 
-
 # Kernel Image Puller (daemonset)
 kip:
   enabled: true
@@ -84,3 +83,26 @@ kip:
   pullPolicy: IfNotPresent
   # The interval (in seconds) at which the Kernel Image Puller fetches kernelspecs to pull kernel images.
   interval: 300
+
+spec:
+  storage:
+    type: dynamic
+    extraLabels: {}
+    homeMountPath: /home/jovyan
+    capacity: 1Gi
+    static:
+      pvcName:
+      subPath: '{username}'
+    dynamic:
+      storageClass: nfs-client
+      pvcNameTemplate: claim-{username}{servername}
+      volumeNameTemplate: volume-{username}{servername}
+      storageAccessModes: [ReadWriteOnce]
+    extraVolumes:
+      - name: enterprise-gateway-shared
+        persistentVolumeClaim:
+          claimName: enterprise-gateway-shared-pvc
+    extraVolumeMounts:
+      - name: enterprise-gateway-shared
+        mountPath: /home/jovyan/shared
+

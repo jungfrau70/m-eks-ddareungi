@@ -252,7 +252,6 @@ singleuser:
     allowedIngressPorts: []
   events: true
   extraAnnotations: {}
-  defaultUrl: "/lab"
   extraLabels:
     hub.jupyter.org/network-access-hub: 'true'
   lifecycleHooks: {}
@@ -271,44 +270,32 @@ singleuser:
     JUPYTER_GATEWAY_URL: http://enterprise-gateway.enterprise-gateway:8888
     JUPYTER_GATEWAY_REQUEST_TIMEOUT: "120"
   image:
-    name: jupyter/minimal-notebook
-    tag: 2343e33dec46
+    name: elyra/elyra
+    tag: 1.0.1
   profileList:
-    - display_name: "Minimal environment"
-      description: "To avoid too much bells and whistles: Python."
+    - display_name: "Jupyter Enterprise Gateway"
+      description: "If you want the additional bells and whistles: Tensorflow and Keras machine learning libraries."
       default: true
-    - display_name: "Datascience environment"
-      description: "If you want the additional bells and whistles: Python, R, and Julia."
       kubespawner_override:
-        image: jupyter/datascience-notebook:2343e33dec46
-    - display_name: "Spark environment"
-      description: "The Jupyter Stacks spark image!"
-      kubespawner_override:
-        image: jupyter/all-spark-notebook:2343e33dec46
-    - display_name: "Learning Data Science"
-      description: "Datascience Environment with Sample Notebooks"
-      kubespawner_override:
-        image: jupyter/datascience-notebook:2343e33dec46
         lifecycle_hooks:
           postStart:
             exec:
               command: ["sh","-c","rm -rf notebooks && git clone https://github.com/jupyteronline/notebooks.git"]
-    - display_name: "Jupyter Enterprise Gateway"
-      description: "If you want the additional bells and whistles: Tensorflow and Keras machine learning libraries."
-      kubespawner_override:
-        image: elyra/elyra:1.0.1
         #image: elyra/nb2kg:2.3.0
-
   storage:
-    type: dynamic
-    extraLabels: {}
-    homeMountPath: /home/jovyan
-    capacity: 1Gi
-    static:
-      pvcName:
-      subPath: '{username}'
     dynamic:
       storageClass: nfs-client
+
+#  storage:
+#    type: dynamic
+#    extraLabels: {}
+#    homeMountPath: /home/jovyan
+#    capacity: 1Gi
+#    static:
+#      pvcName:
+#      subPath: '{username}'
+#    dynamic:
+#      storageClass: nfs-client
       pvcNameTemplate: claim-{username}{servername}
       volumeNameTemplate: volume-{username}{servername}
       storageAccessModes: [ReadWriteOnce]
@@ -319,15 +306,13 @@ singleuser:
     extraVolumeMounts:
       - name: jupyterhub-shared
         mountPath: /home/jovyan/shared
+
   cpu:
     limit: 1
     guarantee: 0.5
   memory:
     limit: 1G
     guarantee: 1M
-  storage:
-    dynamic:
-      storageClass: nfs-client
 
 scheduling:
   userScheduler:
