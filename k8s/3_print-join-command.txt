@@ -1,0 +1,6 @@
+#kubeadm token create --print-join-command
+
+
+kubeadm join 192.168.1.232:6443 --token kv09hx.lcbpl70trxtuaui4 \
+    --discovery-token-ca-cert-hash sha256:d0df44bfa3d82431ceca17428d7c77d94fc0191df42ccc5fd74cb0d03d3be7c0
+
