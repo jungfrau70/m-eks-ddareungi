@@ -19,7 +19,7 @@ spec:
   #  secretName: nginx-kubeflow-jupyter-secret
   rules:
     # Replace the placeholder with your domain name (e.g. ingress.dev.blog.shoot.canary.k8s-hana.ondemand.com)
-    - host: kubeflow.jupyterbook.com
+    - host: www.jupyterbook.com
       http:
         paths:
           - path: /
