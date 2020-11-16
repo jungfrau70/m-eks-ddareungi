@@ -1,29 +1,29 @@
 ---
-apiVersion: networking.k8s.io/v1beta1
+apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  namespace: enterprise-gateway
-  name: enterprise-gateway-ingress
+  namespace: istio-system
+  name: ingress-istio-ingressgateway
   annotations:
     kubernetes.io/ingress.class: "nginx"
-    nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
-    nginx.ingress.kubernetes.io/rewrite-target: /$1
-    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    #nginx.ingress.kubernetes.io/ssl-redirect: "false"
     cert-manager.io/cluster-issuer: letsencrypt-prod-nginx
+    #ingress.kubernetes.io/ssl-redirect: "true"
+    #ingress.kubernetes.io/ssl-redirect: "false"
     kubernetes.io/tls-acme: "true"
-
 spec:
   tls:
   # Replace the placeholder with your domain name (e.g. ingress.dev.blog.shoot.canary.k8s-hana.ondemand.com)
   - hosts:
-    - egw.jupyterbook.com
-    secretName: nginx-egw-prod-secret
+    - www.jupyterbook.com
+    secretName: nginx-kubeflow-jupyter-secret
   rules:
     # Replace the placeholder with your domain name (e.g. ingress.dev.blog.shoot.canary.k8s-hana.ondemand.com)
-    - host: egw.jupyterbook.com
+    - host: www.jupyterbook.com
       http:
         paths:
-          - path: /gateway/?(.*)
+          - path: /
             backend:
-              serviceName: enterprise-gateway
-              servicePort: 8888
+              serviceName: istio-ingressgateway
+              servicePort: 80
+

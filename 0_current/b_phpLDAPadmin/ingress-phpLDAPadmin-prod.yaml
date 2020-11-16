@@ -2,27 +2,28 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  namespace: istio-system
-  name: ingress-istio-ingressgateway
+  namespace: auth
+  name: ingress-ldap
   annotations:
     kubernetes.io/ingress.class: "nginx"
     #nginx.ingress.kubernetes.io/ssl-redirect: "false"
-    #cert-manager.io/cluster-issuer: letsencrypt-prod-nginx
-    #ingress.kubernetes.io/ssl-redirect: "true"
+    cert-manager.io/cluster-issuer: letsencrypt-prod-nginx
+    ingress.kubernetes.io/ssl-redirect: "true"
     #ingress.kubernetes.io/ssl-redirect: "false"
-    #kubernetes.io/tls-acme: "true"
+    kubernetes.io/tls-acme: "true"
 spec:
-  #tls:
+  tls:
   # Replace the placeholder with your domain name (e.g. ingress.dev.blog.shoot.canary.k8s-hana.ondemand.com)
-  #- hosts:
-  #  - kf.jupyterbook.com
-  #  secretName: nginx-kubeflow-jupyter-secret
+  - hosts:
+    - ldap.jupyterbook.com
+    secretName: nginx-ldap-prod-secret
   rules:
     # Replace the placeholder with your domain name (e.g. ingress.dev.blog.shoot.canary.k8s-hana.ondemand.com)
-    - host: www.jupyterbook.com
+    - host: ldap.jupyterbook.com
       http:
         paths:
           - path: /
             backend:
-              serviceName: istio-ingressgateway
+              serviceName: phpldapadmin
               servicePort: 80
+---
