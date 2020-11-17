@@ -5,24 +5,25 @@ metadata:
   namespace: istio-system
   name: ingress-istio-ingressgateway
   annotations:
-    kubernetes.io/ingress.class: istio
+    kubernetes.io/ingress.class: "nginx"
     #nginx.ingress.kubernetes.io/ssl-redirect: "false"
-    #cert-manager.io/cluster-issuer: letsencrypt-prod-nginx
+    cert-manager.io/cluster-issuer: letsencrypt-prod-nginx
     #ingress.kubernetes.io/ssl-redirect: "true"
     #ingress.kubernetes.io/ssl-redirect: "false"
-    #kubernetes.io/tls-acme: "true"
+    kubernetes.io/tls-acme: "true"
 spec:
   tls:
-    - secretName: istio-ingress-certs # currently ignored
   # Replace the placeholder with your domain name (e.g. ingress.dev.blog.shoot.canary.k8s-hana.ondemand.com)
-  #- hosts:
-  #  - kf.jupyterbook.com
-  #  secretName: nginx-kubeflow-jupyter-secret
+  - hosts:
+    - kubeflow.jupyterbook.com
+    secretName: nginx-kubeflow-jupyter-secret
   rules:
     # Replace the placeholder with your domain name (e.g. ingress.dev.blog.shoot.canary.k8s-hana.ondemand.com)
-    - http:
+    - host: kubeflow.jupyterbook.com
+      http:
         paths:
           - path: /
             backend:
               serviceName: istio-ingressgateway
               servicePort: 80
+

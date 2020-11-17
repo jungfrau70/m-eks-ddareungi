@@ -1,5 +1,5 @@
 ---
-apiVersion: networking.k8s.io/v1beta1
+apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   namespace: jupyterbook
@@ -15,14 +15,15 @@ spec:
   tls:
   # Replace the placeholder with your domain name (e.g. ingress.dev.blog.shoot.canary.k8s-hana.ondemand.com)
   - hosts:
-    - www.jupyterbook.com
+    - labs.jupyterbook.com
     secretName: nginx-jupyterbook-prod-secret
   rules:
     # Replace the placeholder with your domain name (e.g. ingress.dev.blog.shoot.canary.k8s-hana.ondemand.com)
-    - host: www.jupyterbook.com
+    - host: labs.jupyterbook.com
       http:
         paths:
           - path: /
             backend:
               serviceName: proxy-public
               servicePort: 80
+---
