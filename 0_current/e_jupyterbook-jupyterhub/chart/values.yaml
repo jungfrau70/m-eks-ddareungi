@@ -267,20 +267,23 @@ singleuser:
     limit: 1G
     guarantee: 1M
   extraEnv:
-    JUPYTER_GATEWAY_URL: http://enterprise-gateway.enterprise-gateway:8888
+    JUPYTER_GATEWAY_URL: http://enterprise-gateway.enterprise-gateway.svc.cluster.local:8888
+    #JUPYTER_GATEWAY_URL: http://egw.jupyterbook.com/gateway
     JUPYTER_GATEWAY_REQUEST_TIMEOUT: "120"
   image:
-    name: elyra/elyra
-    tag: 1.0.1
+    name: elyra/nb2kg
+    tag: 2.3.0
+    #name: elyra/elyra
+    #tag: 1.0.1
   profileList:
     - display_name: "Jupyter Enterprise Gateway"
       description: "If you want the additional bells and whistles: Tensorflow and Keras machine learning libraries."
       default: true
-      kubespawner_override:
-        lifecycle_hooks:
-          postStart:
-            exec:
-              command: ["sh","-c","rm -rf notebooks && git clone https://github.com/jupyteronline/notebooks.git"]
+      #kubespawner_override:
+      #  lifecycle_hooks:
+        #  postStart:
+        #    exec:
+        #      command: ["sh","-c","rm -rf notebooks && git clone https://github.com/jupyteronline/notebooks.git"]
         #image: elyra/nb2kg:2.3.0
   storage:
     dynamic:
