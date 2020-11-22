@@ -1,6 +1,0 @@
-HTTP/2.0 200 OK
-Content-Length: 624
-Content-Type: application/json
-Date: Tue, 25 Aug 2020 12:51:54 GMT
-
-{"kind":"APIResourceList","apiVersion":"v1","groupVersion":"authentication.istio.io/v1alpha1","resources":[{"name":"meshpolicies","singularName":"meshpolicy","namespaced":false,"kind":"MeshPolicy","verbs":["delete","deletecollection","get","list","patch","create","update","watch"],"categories":["istio-io","authentication-istio-io"],"storageVersionHash":"64n+0ld/j1E="},{"name":"policies","singularName":"policy","namespaced":true,"kind":"Policy","verbs":["delete","deletecollection","get","list","patch","create","update","watch"],"categories":["istio-io","authentication-istio-io"],"storageVersionHash":"0bRSEr4jatk="}]}

@@ -1,6 +1,0 @@
-HTTP/2.0 200 OK
-Content-Length: 1182
-Content-Type: application/json
-Date: Wed, 13 May 2020 10:18:11 GMT
-
-{"kind":"APIResourceList","apiVersion":"v1","groupVersion":"monitoring.coreos.com/v1","resources":[{"name":"podmonitors","singularName":"podmonitor","namespaced":true,"kind":"PodMonitor","verbs":["delete","deletecollection","get","list","patch","create","update","watch"],"storageVersionHash":"t6BHpUAzPig="},{"name":"prometheuses","singularName":"prometheus","namespaced":true,"kind":"Prometheus","verbs":["delete","deletecollection","get","list","patch","create","update","watch"],"storageVersionHash":"C8naPY4eojU="},{"name":"alertmanagers","singularName":"alertmanager","namespaced":true,"kind":"Alertmanager","verbs":["delete","deletecollection","get","list","patch","create","update","watch"],"storageVersionHash":"NshW3zg1K7o="},{"name":"servicemonitors","singularName":"servicemonitor","namespaced":true,"kind":"ServiceMonitor","verbs":["delete","deletecollection","get","list","patch","create","update","watch"],"storageVersionHash":"JLhPcfa+5xE="},{"name":"prometheusrules","singularName":"prometheusrule","namespaced":true,"kind":"PrometheusRule","verbs":["delete","deletecollection","get","list","patch","create","update","watch"],"storageVersionHash":"RSJ8iG+KDOo="}]}

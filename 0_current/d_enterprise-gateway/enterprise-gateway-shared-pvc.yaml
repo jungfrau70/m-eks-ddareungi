@@ -13,9 +13,9 @@ spec:
   resources:
     requests:
       storage: 30G
-#  selector:
-#    matchLabels:
-#      app: enterprise-gateway
+  selector:
+    matchLabels:
+      app: enterprise-gateway
 ---
 kind: PersistentVolumeClaim
 apiVersion: v1
@@ -30,6 +30,6 @@ spec:
   resources:
     requests:
       storage: 10G
-#  selector:
-#    matchLabels:
-#      app: enterprise-gateway
+  selector:
+    matchLabels:
+      app: enterprise-gateway

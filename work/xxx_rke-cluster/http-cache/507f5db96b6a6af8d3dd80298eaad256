@@ -1,6 +1,0 @@
-HTTP/2.0 200 OK
-Content-Length: 518
-Content-Type: application/json
-Date: Tue, 25 Aug 2020 12:51:54 GMT
-
-{"kind":"APIResourceList","apiVersion":"v1","groupVersion":"networking.istio.io/v1beta1","resources":[{"name":"workloadentries","singularName":"workloadentry","namespaced":true,"kind":"WorkloadEntry","verbs":["delete","deletecollection","get","list","patch","create","update","watch"],"shortNames":["we"],"categories":["istio-io","networking-istio-io"],"storageVersionHash":"ZyZMEVHubgI="},{"name":"workloadentries/status","singularName":"","namespaced":true,"kind":"WorkloadEntry","verbs":["get","patch","update"]}]}

@@ -1,6 +1,6 @@
 #!/bin/bash
 source ./.env
 
-helm delete $RELEASE --purge
+helm delete $RELEASE -n $NAMESPACE
 
 kubectl delete -f istio-harbor.yaml

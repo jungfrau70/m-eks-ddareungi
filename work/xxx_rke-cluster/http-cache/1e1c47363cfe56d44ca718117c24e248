@@ -1,6 +1,0 @@
-HTTP/2.0 200 OK
-Content-Length: 734
-Content-Type: application/json
-Date: Tue, 25 Aug 2020 12:51:54 GMT
-
-{"kind":"APIResourceList","apiVersion":"v1","groupVersion":"acme.cert-manager.io/v1alpha2","resources":[{"name":"orders","singularName":"order","namespaced":true,"kind":"Order","verbs":["delete","deletecollection","get","list","patch","create","update","watch"],"storageVersionHash":"PrBRi5Uu4ZE="},{"name":"orders/status","singularName":"","namespaced":true,"kind":"Order","verbs":["get","patch","update"]},{"name":"challenges","singularName":"challenge","namespaced":true,"kind":"Challenge","verbs":["delete","deletecollection","get","list","patch","create","update","watch"],"storageVersionHash":"AhEPGt1lAas="},{"name":"challenges/status","singularName":"","namespaced":true,"kind":"Challenge","verbs":["get","patch","update"]}]}
