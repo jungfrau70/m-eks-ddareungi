@@ -3,14 +3,9 @@
 # free to use different values.
 source ./.env
 
-helm repo add harbor https://helm.goharbor.io
-helm repo update
-
-kubectl create ns $NAMESPACE
-kubectl apply -f istio-harbor.yaml
+kubectl get namespace $NAMESPACE &> /dev/null || kubectl create namespace $NAMESPACE
 
 cd chart
 helm install $RELEASE . \
   --namespace $NAMESPACE \
-  --set harborAdminPassword="2020@alpha" \
   --values values.yaml
