@@ -9,4 +9,5 @@ helm repo update
 helm install $RELEASE bitnami/kibana \
 	--namespace=$NAMESPACE \
 	--set elasticsearch.hosts[0]=$ES_HOST \
-	--set elasticsearch.port=$ES_PORT
+	--set elasticsearch.port=$ES_PORT \
+	--set service.type=LoadBalancer
