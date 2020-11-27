@@ -1,0 +1,88 @@
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: harbor-gateway
+  namespace: harbor
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+  - port:
+      number: 80
+      name: http-harbor
+      protocol: HTTP
+    hosts:
+    - harbor.jupyteronline.com
+  - port:
+      number: 443
+      name: https-harbor
+      protocol: HTTPS
+    hosts:
+    - harbor.jupyteronline.com
+    - notary.jupyteronline.com
+    tls:
+      mode: PASSTHROUGH
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: harbor-http-virtual-service
+  namespace: harbor
+spec:
+  hosts:
+  - harbor.jupyteronline.com
+  gateways:
+  - harbor-gateway
+  http:
+  - match:
+    - port: 80
+    route:
+    - destination:
+        host: harbor.harbor.svc.cluster.local
+        port:
+          number: 80
+
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: harbor-https-virtual-service
+  namespace: harbor
+spec:
+  hosts:
+  - harbor.jupyteronline.com
+  gateways:
+  - harbor-gateway
+  tls:
+  - match:
+    - port: 443
+      sniHosts:
+      - harbor.jupyteronline.com
+    route:
+    - destination:
+        host: harbor.harbor.svc.cluster.local
+        port:
+          number: 443
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: harbor-notary-virtual-service
+  namespace: harbor
+spec:
+  hosts:
+  - notary.jupyteronline.com
+  gateways:
+  - harbor-gateway
+  tls:
+  - match:
+    - port: 443
+      sniHosts:
+      - notary.jupyteronline.com
+    route:
+    - destination:
+        host: harbor.harbor.svc.cluster.local
+        port:
+          number: 4443
+

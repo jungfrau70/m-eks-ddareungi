@@ -1,0 +1,3 @@
+eksctl-dev-nodegroup-nodegroup-cp-NodeInstanceRole-L3DT600HR46
+eksctl-dev-nodegroup-nodegroup-gp-NodeInstanceRole-1PAKQR9UHJKEX
+

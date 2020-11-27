@@ -1,5 +1,0 @@
-# Install & Configuration : https://vitux.com/install-nfs-server-and-client-on-ubuntu/
-# Permission Issue : https://github.com/kubernetes/kubernetes/issues/54601
-
-sudo vi /etc/exports
-sudo /etc/init.d/nfs-kernel-server restart
