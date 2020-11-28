@@ -1,6 +1,6 @@
 ---
-#apiVersion: networking.k8s.io/v1beta1
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1beta1
+#apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   namespace: istio-system
@@ -17,11 +17,11 @@ spec:
   tls:
   # Replace the placeholder with your domain name (e.g. ingress.dev.blog.shoot.canary.k8s-hana.ondemand.com)
   - hosts:
-    - playdata.6team.kubeflow.com
+    - playdata.kubenote.com
     secretName: nginx-kubeflow-secret
   rules:
     # Replace the placeholder with your domain name (e.g. ingress.dev.blog.shoot.canary.k8s-hana.ondemand.com)
-    - host: playdata.6team.kubeflow.com
+    - host: playdata.kubenote.com
       http:
         paths:
           - path: /

@@ -13,4 +13,4 @@ helm install $RELEASE stable/nginx-ingress \
        --set controller.hostNetwork=true,controller.kind=DaemonSet \
        --set controller.config.proxy-body-size=256m
 
-kubectl patch svc $RELEASE-controller -n $NAMESPACE -p '{"spec": {"type": "LoadBalancer"}}'
+#kubectl patch svc $RELEASE-controller -n $NAMESPACE -p '{"spec": {"type": "LoadBalancer"}}'
